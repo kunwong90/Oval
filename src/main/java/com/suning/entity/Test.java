@@ -12,7 +12,6 @@ public class Test {
 		Person person = new Person();
 		person.setAddress("11");
 		person.setAge(505);
-		//person.setId("  ");
 		person.setName("99");
 		person.setPhone("22222222222");
 		person.setMail("ddd@dd.com");
@@ -28,16 +27,6 @@ public class Test {
 			System.out.println(violation.getMessage());
 		}
 		
-		
-		
-		
-		/*Person2 person2 = new Person2();
-		person2.setPassword("22");
-		Validator validator = new Validator();
-		List<ConstraintViolation> violations = validator.validate(person2);
-		for (ConstraintViolation violation : violations) {
-			System.out.println(violation.getMessage());
-		}*/
 	}
 
 }
