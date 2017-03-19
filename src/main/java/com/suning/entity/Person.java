@@ -29,7 +29,7 @@ public class Person {
 	private String address;
 	
 	@NotBlank
-	@NotNull
+	@NotNull(message="手机不能为空")
 	@Length(max=11, min=11, message="手机长度不符合规范")
 	private String phone;
 	

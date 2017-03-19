@@ -22,8 +22,14 @@ public class Test {
 		person.setList(list);
 
 		Validator validator = new Validator();
-		List<ConstraintViolation> violations = validator.validate(person);
+		/*List<ConstraintViolation> violations = validator.validate(person);
 		for (ConstraintViolation violation : violations) {
+			System.out.println(violation.getMessage());
+		}*/
+		
+		Man man = new Man();
+		List<ConstraintViolation> violationsMan = validator.validate(man);
+		for (ConstraintViolation violation : violationsMan) {
 			System.out.println(violation.getMessage());
 		}
 		
