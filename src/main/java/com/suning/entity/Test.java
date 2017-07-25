@@ -1,8 +1,8 @@
 package com.suning.entity;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+
+import com.suning.utils.ValidationUtils;
 import net.sf.oval.ConstraintViolation;
 import net.sf.oval.Validator;
 
@@ -50,6 +50,15 @@ public class Test {
 		futureExample.setDate("2017-07-22 00:00:00");
 		futureExample.setDate1(new Date(new Date().getTime() + 1000));
 		validator(futureExample);
+
+
+		CollectionSize collectionSize = new CollectionSize();
+		List<String> list1 = new ArrayList<>();
+		list1.add("name");
+		collectionSize.setList(list1);
+		Map<String, String> map = new HashMap<>();
+		collectionSize.setMap(map);
+		ValidationUtils.validate(collectionSize);
 	}
 
 	private static void validator(Object object) {
