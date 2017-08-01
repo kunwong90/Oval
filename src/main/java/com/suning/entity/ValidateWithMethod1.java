@@ -1,6 +1,7 @@
 package com.suning.entity;
 
 import net.sf.oval.constraint.Min;
+import net.sf.oval.constraint.NotNull;
 import net.sf.oval.constraint.Range;
 import net.sf.oval.constraint.ValidateWithMethod;
 
@@ -18,6 +19,13 @@ public class ValidateWithMethod1 {
      */
     @ValidateWithMethod(methodName = "isValidDay", parameterType = int.class, message = "非法的天数")
     private int day = 31;
+
+    /**
+     * 判断工号是否是临时工号，以Y开头的为临时工号
+     */
+    @NotNull(message = "工号不能为空")
+    @ValidateWithMethod(methodName = "isTemporary", parameterType = String.class, message= "非临时工号")
+    private String saleNo;
 
     public int getYear() {
         return year;
@@ -43,11 +51,23 @@ public class ValidateWithMethod1 {
         this.day = day;
     }
 
+    public String getSaleNo() {
+        return saleNo;
+    }
+
+    public void setSaleNo(String saleNo) {
+        this.saleNo = saleNo;
+    }
+
     private boolean isValidDay(int day) {
         //闰年
         if((year % 4 == 0 && year % 100 != 0 || year % 400 == 0) && month == 2 && day == 29) {
             return true;
         }
         return false;
+    }
+
+    private boolean isTemporary(String saleNo) {
+        return saleNo.startsWith("Y");
     }
 }

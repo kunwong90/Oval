@@ -29,7 +29,8 @@ public class Test {
 		ValidateWithMethod1 validateWithMethod1 = new ValidateWithMethod1();
 		validateWithMethod1.setMonth(2);
 		validateWithMethod1.setYear(2000);
-		validateWithMethod1.setDay(28);
+		validateWithMethod1.setDay(29);
+		validateWithMethod1.setSaleNo("16121145");
 		validator(validateWithMethod1);
 
 		CheckWithCheckExample dayEntity = new CheckWithCheckExample();
