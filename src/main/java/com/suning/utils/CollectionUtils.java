@@ -13,6 +13,6 @@ public class CollectionUtils {
     }
 
     public static boolean isNotEmpty(Collection coll) {
-        return !CollectionUtils.isEmpty(coll);
+        return !isEmpty(coll);
     }
 }
