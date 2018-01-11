@@ -1,10 +1,9 @@
-package com.suning.utils;
+package com.learn.utils;
 
 import net.sf.oval.ConstraintViolation;
 import net.sf.oval.Validator;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 public class ValidationUtils {

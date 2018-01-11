@@ -1,7 +1,7 @@
-package com.suning.nested.entity;
+package com.learn.nested.entity;
 
 
-import com.suning.utils.ValidationUtils;
+import com.learn.utils.ValidationUtils;
 
 public class NestedTest {
 

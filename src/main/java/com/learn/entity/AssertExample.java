@@ -1,6 +1,6 @@
-package com.suning.entity;
+package com.learn.entity;
 
-import com.suning.utils.ValidationUtils;
+import com.learn.utils.ValidationUtils;
 import net.sf.oval.constraint.*;
 
 public class AssertExample {

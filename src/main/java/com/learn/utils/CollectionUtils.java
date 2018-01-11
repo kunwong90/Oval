@@ -1,4 +1,4 @@
-package com.suning.utils;
+package com.learn.utils;
 
 import java.util.Collection;
 

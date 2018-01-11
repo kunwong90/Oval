@@ -1,4 +1,4 @@
-package com.suning.entity;
+package com.learn.entity;
 
 import net.sf.oval.constraint.Future;
 

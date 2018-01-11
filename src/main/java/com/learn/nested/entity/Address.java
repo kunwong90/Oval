@@ -1,4 +1,4 @@
-package com.suning.nested.entity;
+package com.learn.nested.entity;
 
 import net.sf.oval.constraint.NotNull;
 

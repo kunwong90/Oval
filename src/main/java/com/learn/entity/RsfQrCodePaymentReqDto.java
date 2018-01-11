@@ -1,9 +1,7 @@
-package com.suning.entity;
+package com.learn.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 
-import net.sf.oval.constraint.Assert;
 import net.sf.oval.constraint.NotNull;
 
 
