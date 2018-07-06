@@ -1,9 +1,7 @@
 package com.learn.entity;
 
 import com.learn.utils.ValidationUtils;
-import net.sf.oval.constraint.Length;
-import net.sf.oval.constraint.NotBlank;
-import net.sf.oval.constraint.NotNull;
+import net.sf.oval.constraint.*;
 
 
 /**
@@ -35,6 +33,18 @@ public class Store {
     @Length(min = 1)
     private String id;
 
+    /**
+     * 当type=1时，content长度不能超过20
+     * 当type=2时，content长度不能超过30
+     */
+    private Integer type;
+
+    @NotNull
+    @NotBlank
+    //@Length(min = 1, when = "js:_this.type == 1", max = 10)
+    @CheckWith(value = ContentCheck.class, message = "评论内容超长")
+    private String content;
+
     public String getStoreName() {
         return storeName;
     }
@@ -59,10 +69,52 @@ public class Store {
         this.id = id;
     }
 
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
     public static void main(String[] args) {
         Store store = new Store();
         store.setStoreEnglishName("english");
         store.setId("1");
+        store.setType(1);
+        store.setContent("1111111111111111111111");
         ValidationUtils.validate(store);
+    }
+
+    private static class ContentCheck implements CheckWithCheck.SimpleCheck {
+        @Override
+        public boolean isSatisfied(Object validatedObject, Object value) {
+            if (validatedObject instanceof Store) {
+                Store store = (Store) validatedObject;
+                if (store.type != null) {
+                    if (store.type == 1) {
+                        if (store.content.length() > 20) {
+                            return false;
+                        }
+                    } else if (store.type == 2) {
+                        if (store.content.length() > 30) {
+                            return false;
+                        }
+                    } else {
+                        return true;
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
