@@ -1,7 +1,10 @@
 package com.learn.entity;
 
 import com.learn.utils.ValidationUtils;
+import net.sf.oval.Validator;
 import net.sf.oval.constraint.*;
+import net.sf.oval.context.OValContext;
+import org.apache.commons.lang3.StringUtils;
 
 
 /**
@@ -15,17 +18,19 @@ public class Store {
     /**
      * 店铺中文名称
      */
-    @NotNull(when = "js:_this.storeEnglishName == null", message = "店铺中文名称和店铺英文名称不能同时为空1")
-    @NotBlank(message = "店铺中文名不能为空")
-    @Length(min = 1, max = 20, message = "店铺英文名称长度必须在{min}到{max}之间")
+    @NotNull(when = "js:_this.storeEnglishName == null", message = "店铺中文名称和店铺英文名称不能同时为空")
+    @ValidateWithMethod(methodName = "isBlankStoreName", parameterType = String.class, message = "店铺中文名称和店铺英文名称不能同时为空")
+    //@CheckWith(value = CheckStore.class, message = "店铺中文名称和店铺英文名称不能同时为空")
+    @Length(when = "js:_value != null && _value.trim.length > 0", min = 1, max = 20, message = "店铺中文名称长度必须在{min}到{max}之间")
     private String storeName;
 
     /**
      * 店铺英文名称
      */
-    @NotNull(when = "js:_this.storeName == null", message = "店铺中文名称和店铺英文名称不能同时为空3")
-    @NotBlank(message = "店铺英文名称不能为空")
-    @Length(min = 1, max = 30, message = "店铺英文名称长度必须在{min}到{max}之间")
+    @NotNull(when = "js:_this.storeName == null", message = "店铺中文名称和店铺英文名称不能同时为空")
+    //@CheckWith(value = CheckStore.class, message = "店铺中文名称和店铺英文名称不能同时为空")
+    @ValidateWithMethod(methodName = "isBlankStoreName", parameterType = String.class, message = "店铺中文名称和店铺英文名称不能同时为空")
+    @Length(when = "js:_value != null && _value.trim.length > 0", min = 1, max = 30, message = "店铺英文名称长度必须在{min}到{max}之间")
     private String storeEnglishName;
 
     @NotNull(message = "id不能为null")
@@ -87,10 +92,11 @@ public class Store {
 
     public static void main(String[] args) {
         Store store = new Store();
-        store.setStoreEnglishName("english");
+        store.setStoreEnglishName(null);
+        store.setStoreName(null);
         store.setId("1");
         store.setType(1);
-        store.setContent("1111111111111111111111");
+        store.setContent("99");
         ValidationUtils.validate(store);
     }
 
@@ -116,5 +122,34 @@ public class Store {
             }
             return false;
         }
+    }
+
+    /**
+     * storeName和storeEnglishName全部为null，方法不执行
+     */
+    private static class CheckStore implements CheckWithCheck.SimpleCheck {
+        @Override
+        public boolean isSatisfied(Object o, Object o1) {
+            if (o instanceof Store) {
+                Store store = (Store) o;
+                if (StringUtils.isAllBlank(store.getStoreName(), store.getStoreEnglishName())) {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+    }
+
+    /**
+     * storeName和storeEnglishName全部为null，方法不执行
+     * @param name
+     * @return
+     */
+    private boolean isBlankStoreName(String name) {
+        if (StringUtils.isAllBlank(this.storeName, this.storeEnglishName)) {
+            return false;
+        }
+        return true;
     }
 }
