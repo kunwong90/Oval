@@ -41,7 +41,10 @@ public class Store {
     /**
      * 当type=1时，content长度不能超过20
      * 当type=2时，content长度不能超过30
+     * type不能为null并且不等于0
      */
+    @NotNull(message = "type不能为空")
+    @Min(value = 1, message = "type的值必须大于等于1")
     private Integer type;
 
     @NotNull
@@ -93,9 +96,9 @@ public class Store {
     public static void main(String[] args) {
         Store store = new Store();
         store.setStoreEnglishName(null);
-        store.setStoreName(null);
+        store.setStoreName("好到家");
         store.setId("1");
-        store.setType(1);
+        store.setType(0);
         store.setContent("99");
         ValidationUtils.validate(store);
     }
