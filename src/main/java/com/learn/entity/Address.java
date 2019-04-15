@@ -17,7 +17,6 @@ public class Address {
     @NotNull(message = "streets不能为空")
     private List<String> streets;
 
-    //@NotNull
     @NotNegative(message = "重试次数不能为负数")
     private Integer retryTimes;
 
