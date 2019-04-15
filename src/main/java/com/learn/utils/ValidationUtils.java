@@ -2,11 +2,16 @@ package com.learn.utils;
 
 import net.sf.oval.ConstraintViolation;
 import net.sf.oval.Validator;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ValidationUtils {
+/**
+ * @author wangkun
+ * 对象校验
+ */
+public final class ValidationUtils {
 
     private static Validator validator = new Validator();
 
@@ -15,6 +20,9 @@ public class ValidationUtils {
     }
 
     public static void validate(Object obj) {
+        if (obj == null) {
+            throw new RuntimeException("入参不能为空");
+        }
         List<ConstraintViolation> result = new ArrayList<>();
         List<ConstraintViolation> constraintViolation = getRootViolation(validator.validate(obj), result);
         if (CollectionUtils.isNotEmpty(constraintViolation)) {
@@ -23,7 +31,6 @@ public class ValidationUtils {
     }
 
     private static List<ConstraintViolation> getRootViolation(List<ConstraintViolation> shallowViolationSet, List<ConstraintViolation> result) {
-        final List<ConstraintViolation> rootViolationSet = new ArrayList<ConstraintViolation>();
         if (CollectionUtils.isNotEmpty(shallowViolationSet)) {
             for (ConstraintViolation constraintViolation : shallowViolationSet) {
                 if (constraintViolation.getCauses() != null) {

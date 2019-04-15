@@ -1,10 +1,14 @@
 package com.learn.entity;
 
-import java.util.*;
-
 import com.learn.utils.ValidationUtils;
 import net.sf.oval.ConstraintViolation;
 import net.sf.oval.Validator;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Test {
 	
@@ -49,7 +53,7 @@ public class Test {
 
 		FutureExample futureExample = new FutureExample();
 		futureExample.setDate("2017-07-22 00:00:00");
-		futureExample.setDate1(new Date(new Date().getTime() + 1000));
+		futureExample.setDate1(new Date(System.currentTimeMillis() + 1000));
 		validator(futureExample);
 
 
