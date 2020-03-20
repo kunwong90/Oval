@@ -13,7 +13,8 @@ public class PassengeCheckStatusInputTest {
         List<Passenger> passengers = new ArrayList<>();
         Passenger passenger = new Passenger();
         passenger.setPassengerName("11");
-        passenger.setPassportTypeId(" 嗯嗯 ");
+        passenger.setPassportTypeId("2");
+        //passenger.setTel("11");
         passengers.add(passenger);
         passengeCheckStatusInput.setPassengers(passengers);
         ValidationUtils.validate(passengeCheckStatusInput);

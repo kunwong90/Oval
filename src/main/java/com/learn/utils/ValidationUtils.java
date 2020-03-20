@@ -21,12 +21,12 @@ public final class ValidationUtils {
 
     public static void validate(Object obj) {
         if (obj == null) {
-            throw new RuntimeException("入参不能为空");
+            throw new IllegalArgumentException("入参不能为空");
         }
         List<ConstraintViolation> result = new ArrayList<>();
         List<ConstraintViolation> constraintViolation = getRootViolation(validator.validate(obj), result);
         if (CollectionUtils.isNotEmpty(constraintViolation)) {
-            throw new RuntimeException(constraintViolation.get(0).getMessage());
+            throw new IllegalArgumentException(constraintViolation.get(0).getMessage());
         }
     }
 

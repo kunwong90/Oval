@@ -59,6 +59,7 @@ public class Passenger {
     /**
      * 乘客手机号,证件类型为身份证时必填，其他证件类型时手机和邮箱二选一
      */
+    @NotNull(when = "js:_this.passportTypeId == '1' || _this.passportTypeId == '2'", message = "证件类型为身份证时手机号不能为空")
     private String tel;
 
     /**
