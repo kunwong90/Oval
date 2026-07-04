@@ -38,6 +38,11 @@ public class People {
 
     private String identity;
 
+    private String fieldA;
+
+    @NotNull(when = "js:_this.fieldA != null", message = "fieldA不为null时fieldB也不允许为null")
+    private String fieldB;
+
     public String getId() {
         return id;
     }
@@ -92,5 +97,21 @@ public class People {
 
     public void setIdentity(String identity) {
         this.identity = identity;
+    }
+
+    public String getFieldA() {
+        return fieldA;
+    }
+
+    public void setFieldA(String fieldA) {
+        this.fieldA = fieldA;
+    }
+
+    public String getFieldB() {
+        return fieldB;
+    }
+
+    public void setFieldB(String fieldB) {
+        this.fieldB = fieldB;
     }
 }

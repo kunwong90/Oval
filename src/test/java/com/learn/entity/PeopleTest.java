@@ -420,4 +420,87 @@ public class PeopleTest {
         List<ConstraintViolation> violations = validator.validate(people);
         assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("phone、email、identity不能同时为空")));
     }
+
+    // ==================== fieldB 条件 @NotNull 测试 ====================
+    // 约束: @NotNull(when = "js:_this.fieldA != null", message = "fieldA不为null时fieldB也不允许为null")
+
+    @Test
+    void testFieldBNullWhenFieldANotNull() {
+        people.setFieldA("someValue");
+        people.setFieldB(null);
+        List<ConstraintViolation> violations = validator.validate(people);
+        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("fieldA不为null时fieldB也不允许为null")));
+    }
+
+    @Test
+    void testFieldBNotNullWhenFieldANotNull() {
+        people.setFieldA("someValue");
+        people.setFieldB("someFieldB");
+        List<ConstraintViolation> violations = validator.validate(people);
+        assertTrue(violations.stream().noneMatch(v -> v.getMessage().contains("fieldB")));
+    }
+
+    @Test
+    void testFieldBNullWhenFieldANull() {
+        people.setFieldA(null);
+        people.setFieldB(null);
+        List<ConstraintViolation> violations = validator.validate(people);
+        assertTrue(violations.stream().noneMatch(v -> v.getMessage().contains("fieldB")));
+    }
+
+    @Test
+    void testFieldBNotNullWhenFieldANull() {
+        people.setFieldA(null);
+        people.setFieldB("someFieldB");
+        List<ConstraintViolation> violations = validator.validate(people);
+        assertTrue(violations.stream().noneMatch(v -> v.getMessage().contains("fieldB")));
+    }
+
+    @Test
+    void testFieldBNullWhenFieldAEmpty() {
+        people.setFieldA("");
+        people.setFieldB(null);
+        List<ConstraintViolation> violations = validator.validate(people);
+        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("fieldA不为null时fieldB也不允许为null")), "fieldA为空字符串在JS中不等于null，fieldB必须非null");
+    }
+
+    @Test
+    void testFieldBEmptyStringWhenFieldANotNull() {
+        people.setFieldA("someValue");
+        people.setFieldB("");
+        List<ConstraintViolation> violations = validator.validate(people);
+        assertTrue(violations.stream().noneMatch(v -> v.getMessage().contains("fieldB")), "fieldB为空字符串不是null，应该通过");
+    }
+
+    @Test
+    void testFieldBWhitespaceWhenFieldANotNull() {
+        people.setFieldA("someValue");
+        people.setFieldB("   ");
+        List<ConstraintViolation> violations = validator.validate(people);
+        assertTrue(violations.stream().noneMatch(v -> v.getMessage().contains("fieldB")), "fieldB为空格不是null，应该通过");
+    }
+
+    @Test
+    void testBothFieldAAndFieldBNull() {
+        people.setFieldA(null);
+        people.setFieldB(null);
+        List<ConstraintViolation> violations = validator.validate(people);
+        assertTrue(violations.stream().noneMatch(v -> v.getMessage().contains("fieldB")));
+    }
+
+    @Test
+    void testBothFieldAAndFieldBValid() {
+        people.setFieldA("A");
+        people.setFieldB("B");
+        List<ConstraintViolation> violations = validator.validate(people);
+        assertTrue(violations.stream().noneMatch(v -> v.getMessage().contains("fieldB")));
+    }
+
+    @Test
+    void testFieldALongStringFieldBNull() {
+        people.setFieldA("a]value");
+        people.setFieldB(null);
+        List<ConstraintViolation> violations = validator.validate(people);
+        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("fieldA不为null时fieldB也不允许为null")));
+    }
 }

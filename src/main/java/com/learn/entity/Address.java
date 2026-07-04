@@ -1,16 +1,14 @@
 package com.learn.entity;
 
-import net.sf.oval.constraint.Assert;
-import net.sf.oval.constraint.Min;
-import net.sf.oval.constraint.NotBlank;
-import net.sf.oval.constraint.NotNegative;
-import net.sf.oval.constraint.NotNull;
+import net.sf.oval.constraint.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class Address {
 
-    private String privince;
+    private String province;
 
     @NotNull(message = "城市不能为空")
     @NotBlank(message = "城市不能为空")
@@ -33,12 +31,29 @@ public class Address {
     @Assert(expr = "_this.refundMode != 'REFUND' || _value != null", lang = "js", message = "退款模式为REFUND时，退款时间不能为空")
     private String refundTime;
 
-    public String getPrivince() {
-        return privince;
+
+    @NotNull(message = "List不允许为空")
+    @Size(min = 1, message = "List元素个数至少大于等于1")
+    private List<String> list;
+
+    @NotNull(message = "Set不允许为空")
+    @Size(min = 1, message = "Set元素个数至少大于等于1")
+    private Set<String> set;
+
+    @NotNull(message = "Map不允许为空")
+    @Size(min = 1, message = "Map元素个数至少大于等于1")
+    private Map<String, String> map;
+
+    @NotNull(message = "数组不允许为")
+    @Size(min = 1, message = "数组元素个数至少大于等于1")
+    private String[] array;
+
+    public String getProvince() {
+        return province;
     }
 
-    public void setPrivince(String privince) {
-        this.privince = privince;
+    public void setProvince(String province) {
+        this.province = province;
     }
 
     public String getCity() {
@@ -88,5 +103,38 @@ public class Address {
 
     public void setRefundTime(String refundTime) {
         this.refundTime = refundTime;
+    }
+
+
+    public List<String> getList() {
+        return list;
+    }
+
+    public void setList(List<String> list) {
+        this.list = list;
+    }
+
+    public Set<String> getSet() {
+        return set;
+    }
+
+    public void setSet(Set<String> set) {
+        this.set = set;
+    }
+
+    public Map<String, String> getMap() {
+        return map;
+    }
+
+    public void setMap(Map<String, String> map) {
+        this.map = map;
+    }
+
+    public String[] getArray() {
+        return array;
+    }
+
+    public void setArray(String[] array) {
+        this.array = array;
     }
 }

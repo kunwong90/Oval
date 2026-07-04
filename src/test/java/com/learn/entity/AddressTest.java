@@ -6,7 +6,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -27,6 +31,16 @@ public class AddressTest {
         address.setRetryTimes(3);
         address.setAmount(100L);
         address.setRefundMode("RECOVER");
+        List<String> list = new ArrayList<>();
+        list.add("item1");
+        address.setList(list);
+        Set<String> set = new HashSet<>();
+        set.add("item1");
+        address.setSet(set);
+        Map<String, String> map = new HashMap<>();
+        map.put("key1", "value1");
+        address.setMap(map);
+        address.setArray(new String[]{"a"});
     }
 
     @Test
@@ -328,5 +342,249 @@ public class AddressTest {
         address.setRefundTime(null);
         List<ConstraintViolation> violations = validator.validate(address);
         assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("退款模式为REFUND时，退款时间不能为空")));
+    }
+
+    // ==================== List 字段测试 ====================
+
+    @Test
+    void testListNotNull() {
+        address.setList(null);
+        List<ConstraintViolation> violations = validator.validate(address);
+        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("List不允许为空")));
+    }
+
+    @Test
+    void testListEmpty() {
+        address.setList(new ArrayList<>());
+        List<ConstraintViolation> violations = validator.validate(address);
+        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("List元素个数至少大于等于1")));
+    }
+
+    @Test
+    void testListOneElement() {
+        List<String> list = new ArrayList<>();
+        list.add("only");
+        address.setList(list);
+        List<ConstraintViolation> violations = validator.validate(address);
+        assertTrue(violations.stream().noneMatch(v -> v.getMessage().contains("List")), "一个元素的List应该通过");
+    }
+
+    @Test
+    void testListMultipleElements() {
+        List<String> list = new ArrayList<>();
+        list.add("a");
+        list.add("b");
+        list.add("c");
+        address.setList(list);
+        List<ConstraintViolation> violations = validator.validate(address);
+        assertTrue(violations.stream().noneMatch(v -> v.getMessage().contains("List")));
+    }
+
+    @Test
+    void testListWithNullElement() {
+        List<String> list = new ArrayList<>();
+        list.add(null);
+        address.setList(list);
+        List<ConstraintViolation> violations = validator.validate(address);
+        assertTrue(violations.stream().noneMatch(v -> v.getMessage().contains("List元素个数至少大于等于1")), "包含null元素的List不应触发Size校验");
+    }
+
+    @Test
+    void testListWithEmptyString() {
+        List<String> list = new ArrayList<>();
+        list.add("");
+        address.setList(list);
+        List<ConstraintViolation> violations = validator.validate(address);
+        assertTrue(violations.stream().noneMatch(v -> v.getMessage().contains("List")));
+    }
+
+    @Test
+    void testListWithBlankString() {
+        List<String> list = new ArrayList<>();
+        list.add("   ");
+        address.setList(list);
+        List<ConstraintViolation> violations = validator.validate(address);
+        assertTrue(violations.stream().noneMatch(v -> v.getMessage().contains("List")));
+    }
+
+    // ==================== Set 字段测试 ====================
+
+    @Test
+    void testSetNotNull() {
+        address.setSet(null);
+        List<ConstraintViolation> violations = validator.validate(address);
+        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("Set不允许为空")));
+    }
+
+    @Test
+    void testSetEmpty() {
+        address.setSet(new HashSet<>());
+        List<ConstraintViolation> violations = validator.validate(address);
+        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("Set元素个数至少大于等于1")));
+    }
+
+    @Test
+    void testSetOneElement() {
+        Set<String> set = new HashSet<>();
+        set.add("only");
+        address.setSet(set);
+        List<ConstraintViolation> violations = validator.validate(address);
+        assertTrue(violations.stream().noneMatch(v -> v.getMessage().contains("Set")), "一个元素的Set应该通过");
+    }
+
+    @Test
+    void testSetMultipleElements() {
+        Set<String> set = new HashSet<>();
+        set.add("x");
+        set.add("y");
+        set.add("z");
+        address.setSet(set);
+        List<ConstraintViolation> violations = validator.validate(address);
+        assertTrue(violations.stream().noneMatch(v -> v.getMessage().contains("Set")));
+    }
+
+    @Test
+    void testSetDuplicateElements() {
+        Set<String> set = new HashSet<>();
+        set.add("same");
+        set.add("same");
+        address.setSet(set);
+        List<ConstraintViolation> violations = validator.validate(address);
+        assertTrue(violations.stream().noneMatch(v -> v.getMessage().contains("Set")), "Set去重后只剩1个元素，应该通过");
+    }
+
+    @Test
+    void testSetWithEmptyString() {
+        Set<String> set = new HashSet<>();
+        set.add("");
+        address.setSet(set);
+        List<ConstraintViolation> violations = validator.validate(address);
+        assertTrue(violations.stream().noneMatch(v -> v.getMessage().contains("Set")));
+    }
+
+    // ==================== Map 字段测试 ====================
+
+    @Test
+    void testMapNotNull() {
+        address.setMap(null);
+        List<ConstraintViolation> violations = validator.validate(address);
+        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("Map不允许为空")));
+    }
+
+    @Test
+    void testMapEmpty() {
+        address.setMap(new HashMap<>());
+        List<ConstraintViolation> violations = validator.validate(address);
+        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("Map元素个数至少大于等于1")));
+    }
+
+    @Test
+    void testMapOneEntry() {
+        Map<String, String> map = new HashMap<>();
+        map.put("k", "v");
+        address.setMap(map);
+        List<ConstraintViolation> violations = validator.validate(address);
+        assertTrue(violations.stream().noneMatch(v -> v.getMessage().contains("Map")), "一个entry的Map应该通过");
+    }
+
+    @Test
+    void testMapMultipleEntries() {
+        Map<String, String> map = new HashMap<>();
+        map.put("a", "1");
+        map.put("b", "2");
+        map.put("c", "3");
+        address.setMap(map);
+        List<ConstraintViolation> violations = validator.validate(address);
+        assertTrue(violations.stream().noneMatch(v -> v.getMessage().contains("Map")));
+    }
+
+    @Test
+    void testMapNullValue() {
+        Map<String, String> map = new HashMap<>();
+        map.put("key", null);
+        address.setMap(map);
+        List<ConstraintViolation> violations = validator.validate(address);
+        assertTrue(violations.stream().noneMatch(v -> v.getMessage().contains("Map元素个数至少大于等于1")), "value为null的entry不应触发Size校验");
+    }
+
+    @Test
+    void testMapEmptyValue() {
+        Map<String, String> map = new HashMap<>();
+        map.put("key", "");
+        address.setMap(map);
+        List<ConstraintViolation> violations = validator.validate(address);
+        assertTrue(violations.stream().noneMatch(v -> v.getMessage().contains("Map")));
+    }
+
+    // ==================== Array 字段测试 ====================
+
+    @Test
+    void testArrayNotNull() {
+        address.setArray(null);
+        List<ConstraintViolation> violations = validator.validate(address);
+        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("数组不允许为")));
+    }
+
+    @Test
+    void testArrayEmpty() {
+        address.setArray(new String[]{});
+        List<ConstraintViolation> violations = validator.validate(address);
+        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("数组元素个数至少大于等于1")));
+    }
+
+    @Test
+    void testArrayOneElement() {
+        address.setArray(new String[]{"only"});
+        List<ConstraintViolation> violations = validator.validate(address);
+        assertTrue(violations.stream().noneMatch(v -> v.getMessage().contains("数组")), "一个元素的数组应该通过");
+    }
+
+    @Test
+    void testArrayMultipleElements() {
+        address.setArray(new String[]{"a", "b", "c"});
+        List<ConstraintViolation> violations = validator.validate(address);
+        assertTrue(violations.stream().noneMatch(v -> v.getMessage().contains("数组")));
+    }
+
+    @Test
+    void testArrayWithNullElement() {
+        address.setArray(new String[]{null});
+        List<ConstraintViolation> violations = validator.validate(address);
+        assertTrue(violations.stream().noneMatch(v -> v.getMessage().contains("数组元素个数至少大于等于1")), "包含null元素的数组不应触发Size校验");
+    }
+
+    @Test
+    void testArrayWithEmptyString() {
+        address.setArray(new String[]{""});
+        List<ConstraintViolation> violations = validator.validate(address);
+        assertTrue(violations.stream().noneMatch(v -> v.getMessage().contains("数组")));
+    }
+
+    // ==================== 多集合同时校验 ====================
+
+    @Test
+    void testAllCollectionsInvalid() {
+        address.setList(null);
+        address.setSet(null);
+        address.setMap(null);
+        address.setArray(null);
+        List<ConstraintViolation> violations = validator.validate(address);
+        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("List不允许为空")));
+        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("Set不允许为空")));
+        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("Map不允许为空")));
+        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("数组不允许为")));
+    }
+
+    @Test
+    void testAllCollectionsEmpty() {
+        address.setList(new ArrayList<>());
+        address.setSet(new HashSet<>());
+        address.setMap(new HashMap<>());
+        address.setArray(new String[]{});
+        List<ConstraintViolation> violations = validator.validate(address);
+        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("List元素个数至少大于等于1")));
+        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("Set元素个数至少大于等于1")));
+        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("Map元素个数至少大于等于1")));
+        assertTrue(violations.stream().anyMatch(v -> v.getMessage().contains("数组元素个数至少大于等于1")));
     }
 }

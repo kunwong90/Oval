@@ -1,9 +1,6 @@
 package com.learn.entity;
 
-import com.learn.utils.ValidationUtils;
-import net.sf.oval.Validator;
 import net.sf.oval.constraint.*;
-import net.sf.oval.context.OValContext;
 import org.apache.commons.lang3.StringUtils;
 
 
@@ -21,7 +18,7 @@ public class Store {
     @NotNull(when = "js:_this.storeEnglishName == null", message = "店铺中文名称和店铺英文名称不能同时为空")
     @ValidateWithMethod(methodName = "isBlankStoreName", parameterType = String.class, message = "店铺中文名称和店铺英文名称不能同时为空")
     //@CheckWith(value = CheckStore.class, message = "店铺中文名称和店铺英文名称不能同时为空")
-    @Length(when = "js:_value != null && _value.trim.length > 0", min = 1, max = 20, message = "店铺中文名称长度必须在{min}到{max}之间")
+    @Length(when = "js:_value != null && _value.trim().length() > 0", min = 1, max = 20, message = "店铺中文名称长度必须在{min}到{max}之间")
     private String storeName;
 
     /**
@@ -30,7 +27,7 @@ public class Store {
     @NotNull(when = "js:_this.storeName == null", message = "店铺中文名称和店铺英文名称不能同时为空")
     //@CheckWith(value = CheckStore.class, message = "店铺中文名称和店铺英文名称不能同时为空")
     @ValidateWithMethod(methodName = "isBlankStoreName", parameterType = String.class, message = "店铺中文名称和店铺英文名称不能同时为空")
-    @Length(when = "js:_value != null && _value.trim.length > 0", min = 1, max = 30, message = "店铺英文名称长度必须在{min}到{max}之间")
+    @Length(when = "js:_value != null && _value.trim().length() > 0", min = 1, max = 30, message = "店铺英文名称长度必须在{min}到{max}之间")
     private String storeEnglishName;
 
     @NotNull(message = "id不能为null")
@@ -93,16 +90,6 @@ public class Store {
         return content;
     }
 
-    public static void main(String[] args) {
-        Store store = new Store();
-        store.setStoreEnglishName(null);
-        store.setStoreName("好到家");
-        store.setId("1");
-        store.setType(0);
-        store.setContent("99");
-        ValidationUtils.validate(store);
-    }
-
     private static class ContentCheck implements CheckWithCheck.SimpleCheck {
         @Override
         public boolean isSatisfied(Object validatedObject, Object value) {
@@ -146,6 +133,7 @@ public class Store {
 
     /**
      * storeName和storeEnglishName全部为null，方法不执行
+     *
      * @param name
      * @return
      */
